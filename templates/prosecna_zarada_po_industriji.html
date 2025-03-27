@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prosečna Neto Zarada Po Industriji</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="max-w-4xl mx-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-6">Prosečna Neto Zarada Po Industriji</h1>
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <form id="filter-form" class="flex flex-col md:flex-row md:items-center gap-4">
+                <div class="flex-1">
+                    <label for="nkd08" class="block text-sm font-medium text-gray-700">Industrijska Grana:</label>
+                    <select id="nkd08" name="nkd08" class="mt-1 block w-full px-4 py-2 border rounded-lg shadow-sm">
+                        {% for nkd08 in nkd08_values %}
+                            <option value="{{ nkd08 }}">{{ nkd08 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+                    Prikaži grafikon
+                </button>
+            </form>
+        </div>
+
+        <h2 class="text-xl font-semibold mt-6">Grafikon:</h2>
+        <div id="chart-container" class="bg-white shadow-md rounded-lg p-6 mt-4">
+            <!-- Grafikon će biti ubačen ovde -->
+        </div>
+    </div>
+
+    <script>
+        $('#filter-form').on('submit', function(event) {
+            event.preventDefault();
+            var nkd08_value = $('#nkd08').val();
+            
+            $.get('/get_chart_zarada', { nkd08: nkd08_value }, function(response) {
+                $('#chart-container').html(response.chart_html);
+            });
+        });
+    </script>
+</body>
+</html>
